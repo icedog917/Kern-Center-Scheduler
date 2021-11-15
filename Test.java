@@ -1,19 +1,23 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.nio.file.Paths;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class Test {
+    private static ArrayList<Employee> employees;
 
     @BeforeEach
-    //No Constructor
     void setUp() {
-
+        try (Scanner scanner = new Scanner(new File("responses.csv"))) {
+            employees = Main.fileLoad(scanner);
+        }catch(FileNotFoundException e){
+            System.err.println("The file could not be found!");
+        }
     }
 
     @AfterEach
@@ -21,10 +25,11 @@ class Test {
     }
 
     @Test
-    void testNegativeDelaySeconds() {
-        assertThrows(NullPointerException.class, ()->{stopTimeAttributesController.update(-1, 0, new String[3], new String[3]);
-        });
+    void testFirstName() {
+        String firstName = employees.get(0).getName();
+        assertEquals("", firstName);
     }
+
 
 
 }
