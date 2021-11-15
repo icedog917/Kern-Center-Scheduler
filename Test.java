@@ -27,6 +27,18 @@ class Test {
     @org.junit.jupiter.api.Test
     void testFirstName() {
         String firstName = employees.get(0).getName();
-        assertEquals("", firstName);
+        assertEquals("Lexi Such", firstName);
+    }
+
+    @org.junit.jupiter.api.Test
+    void testIsAvailableTrue() {
+        int hour = 15;
+        assertTrue(employees.get(0).isAvailable(Employee.Day.M, hour));
+    }
+
+    @org.junit.jupiter.api.Test
+    void testIsAvailableFalse() {
+        int hour = 23;
+        assertFalse(employees.get(0).isAvailable(Employee.Day.F, hour));
     }
 }

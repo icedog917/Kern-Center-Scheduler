@@ -9,13 +9,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 * Runner class for generating the schedule
 */
 class Main {
-  private static ArrayList<Employee> employees;
+  private static ArrayList<Employee> employees = new ArrayList<>();
 
   public static void main(String[] args) {
-    employees = new ArrayList<>();
     String path = null;
     do{
       path = fileSelector();
+      System.out.println(path);
     }while(path==null);
     try (Scanner scanner = new Scanner(new File(path))) {
       fileLoad(scanner);
@@ -32,8 +32,9 @@ class Main {
     //Assume that the data accounts for starting in the morning as the earliest time slot
     int bracketIndex = currentLine.indexOf("[");
     //Grab the earliest time
-    int currentHour = Integer.parseInt(currentLine.substring(bracketIndex+1, currentLine.indexOf(" ", bracketIndex)));
+    int openingHour = Integer.parseInt(currentLine.substring(bracketIndex+1, currentLine.indexOf(" ", bracketIndex)));
     while (scanner.hasNextLine()) {
+      int currentHour = openingHour;
       currentLine = scanner.nextLine();
       currentLine = skipToNextComma(currentLine);
       Employee currentEmployee = new Employee(currentLine.substring(0, currentLine.indexOf(",")));
@@ -47,7 +48,6 @@ class Main {
       currentEmployee.setHourRange(minHours, maxHours);
 
       employees.add(currentEmployee);
-      ++currentHour;
     }
     return employees;
   }
@@ -97,13 +97,18 @@ class Main {
       if (currentLine.indexOf("\"") == 0 && currentLine.indexOf("\"") != currentLine.lastIndexOf("\"")) {
         String currentDays = currentLine.substring(1, currentLine.indexOf("\"", currentLine.indexOf("\"")+1));
         String[] days = currentDays.split(", ");
-        for(String each: days){
+        for(String each: days) {
           currentEmployee.addTime(parseDay(each), currentHour);
+          currentLine = currentLine.substring(currentLine.indexOf(",", 1)+1);
         }
       } else if(currentLine.indexOf(",") != 0) { //Add single day for time
         currentEmployee.addTime(parseDay(currentLine.substring(0,currentLine.indexOf(","))), currentHour);
+        currentLine = currentLine.substring(currentLine.indexOf(",", 1)+1);
       }
-      currentLine = currentLine.substring(currentLine.indexOf(",", 1)+1);
+      else{
+        currentLine = currentLine.substring(1);
+      }
+      ++currentHour;
     }
   }
 

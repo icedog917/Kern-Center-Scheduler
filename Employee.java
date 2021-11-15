@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Collection;
 
 public class Employee{
   //Represent the days of the week
