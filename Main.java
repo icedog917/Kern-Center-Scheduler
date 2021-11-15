@@ -46,8 +46,6 @@ class Main {
       int maxHours = 0;
       currentEmployee.setHourRange(minHours, maxHours);
 
-
-
       employees.add(currentEmployee);
       ++currentHour;
     }
